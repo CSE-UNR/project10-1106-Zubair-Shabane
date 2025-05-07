@@ -6,18 +6,41 @@
 
 char prompt_user (char userGuesses[], int guessAttempts);
 void lower_case_guess (char userGuesses[], int guessAttempts);
-char checkValidity (char userGuesses[], int guessAttempts);
-char checkGuess (char userGuesses[], char guessWord[]);
+char check_validity (char userGuesses[], int guessAttempts);
+char check_guess (char userGuesses[], int guessAttempts, char guessWord[], char displayGuesses[], char guessHint[][6]);
 
 int main () {
 	char guessWord[6] = "sound";
-	char userGuesses[5];
-	//char wrongSpot[2][5];
-	//char displayGuess[6];
+	char userGuesses[6];
+	char guessHint[2][6];
+	char displayGuesses[6];
 	int guessAttempts;
 	
 	prompt_user (userGuesses, guessAttempts);
-	checkGuess (userGuesses, guessWord);
+	check_guess (userGuesses, guessAttempts, guessWord, displayGuesses, guessHint);
+	
+	printf("%c", displayGuesses);
+	
+	switch(guessAttempts) {
+		case 1: 
+			printf("You won in 1 guess!\nGOATED!");
+			break;
+		case 2:
+			printf("You won in 2 guesses!\nAmazing!");
+			break;
+		case 3: 
+			printf("You won in 3 guesses!\nAmazing!");
+			break;
+		case 4:
+			printf("You won in 4 guesses!\nNice!");
+			break;
+		case 5: 
+			printf("You won in 5 guesses!\nNice!");
+			break;
+		case 6:
+			printf("You won in 6 guesses!\n");
+			break;
+	}
 	
 	return 0;
 }
@@ -43,10 +66,10 @@ void lower_case_guess (char userGuesses[], int guessAttempts) {
 		}
 	}
 	
-	checkValidity(userGuesses, guessAttempts);
+	check_validity(userGuesses, guessAttempts);
 }
 
-char checkValidity (char userGuesses[], int guessAttempts) {
+char check_validity (char userGuesses[], int guessAttempts) {
 printf(userGuesses);
 	
 	int isLetter = 1;
@@ -54,43 +77,75 @@ printf(userGuesses);
 		
 	for(int i = 0; userGuesses[i] != '\0'; i++) {
 		isFive++;
-		
-		if(!(userGuesses[i] >= 'a' && userGuesses[i] <= 'z')) {
+		if(!(userGuesses[i] >= 65 && userGuesses[i] <= 90)) {
 			isLetter = 0;
 		}
 	}
 	
 	if(isLetter == 0 && isFive != 5) {
 		printf("Your guess must be 5 letters long.Your guess must contain only letters.\n");
-		return prompt_user (userGuesses, guessAttempts);
+		prompt_user (userGuesses, guessAttempts);
 	}
 	else if(isFive != 5) {		
 		printf("Your guess must be 5 letters long.\n");
-		return prompt_user (userGuesses, guessAttempts);
+		prompt_user (userGuesses, guessAttempts);
 	}
 	else {
 		return 0;
 	}	
 }
 
-char checkGuess (char userGuesses[], int guessAttempts, char guessWord[]) {
+char check_guess (char userGuesses[], int guessAttempts, char guessWord[], char displayGuesses[], char guessHint[][6]) {
 	int count;
 	
 	for(int i = 0; i < 5; i++) {
 		if(userGuesses[i] == guessWord[i]) {
-			count++;	
+			count++;
+			displayGuesses[i] == userGuesses[i];
+			guessHint[1][i] = guessWord[i] - 32;
 		}
 		else {
-			printf("You lost, better luck next time!");
-			return 0;
+			for(int j = 0; j < 5; j++) {
+				if(i != j && userGuesses[i] == guessWord[j]) {
+					guessHint[1][i] = userGuesses[i];
+					guessHint[2][i] = '^';
+				}
+			}
 		}
 	}
+	
+	printf("%c", guessHint);
 	
 	if(guessAttempts == 6 && count != 5) {
 		printf("You lost, better luck next time!");
 		return 0;	
 	}
 	else {
-		
+		//
 	}
 }
+
+//char display_message (_) {
+
+	//check number of guesses to get right answer then use switch case for congrats message or lose message
+//	printf("You won in 1 guess!\n");
+//	printf("GOATED!");
+	
+//	printf("You won in 2 guesses!\n");
+//	printf("Amazing!");
+	
+//	printf("You won in 3 guesses!\n");
+//	printf("Amazing!");
+	
+//	printf("You won in 4 guesses!\n");
+//	printf("Nice!");
+	
+//	printf("You won in 5 guesses!\n");
+//	printf("Nice!");
+	
+//	printf("You won in 6 guesses!\n");
+	
+//	printf("You lost, better luck next time!");
+//}
+
+//use file io with mystery.txt once everything else works
